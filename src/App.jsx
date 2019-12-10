@@ -13,7 +13,7 @@ function App() {
     <Provider store={configureStore()}>
       <ConnectedRouter history={history}>
         <div className="App">
-          <Auth handleAuthSubmit={() => true} />
+          <Auth />
         </div>
       </ConnectedRouter>
     </Provider>

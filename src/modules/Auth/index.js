@@ -1,3 +1,7 @@
-import Auth from "./components";
+import { compose } from "recompose";
 
-export default Auth;
+import Auth from "./components";
+import withHandlers from "./containers/withHandlers";
+import connect from "./containers/connect";
+
+export default compose(connect, withHandlers)(Auth);

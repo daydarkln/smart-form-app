@@ -1,8 +1,8 @@
-import { preffix } from "../config";
+import config from "../config";
 
 const ls = window.localStorage;
 
-const getName = name => preffix + name;
+const getName = name => config.preffix + name;
 
 const appStorage = {
 	get: (name, defaultValue) => {

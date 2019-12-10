@@ -2,19 +2,21 @@ import { preffix } from "../config";
 
 const ls = window.localStorage;
 
+const getName = name => preffix + name;
+
 const appStorage = {
 	get: (name, defaultValue) => {
-		const result = ls.getItem(name);
+		const result = ls.getItem(getName(name));
 
 		return result ? result : defaultValue;
 	},
 	set: (name, value) => {
-		ls.setItem(name, value);
+		ls.setItem(getName(name), value);
 
 		return true;
 	},
 	removeItem: name => {
-		ls.removeItem(name);
+		ls.removeItem(getName(name));
 	},
 	clear: () => {
 		ls.clear();

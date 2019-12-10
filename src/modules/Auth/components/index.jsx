@@ -1,9 +1,13 @@
 import React from 'react';
 import { Card, Form, Input, Button } from 'antd';
 
+const handleAuthSubmit = values => {
+  debugger
+}
+
 const Auth = props => (
   <Card className="auth-form">
-    <Form onSubmit={props.handleAuthSubmit}>
+    <Form onSubmit={handleAuthSubmit}>
       <Form.Item>
         <Input placeholder="Email*" />
       </Form.Item>

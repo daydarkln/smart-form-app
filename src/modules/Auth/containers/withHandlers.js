@@ -1,12 +1,13 @@
 import { withHandlers } from "recompose";
 
 export default withHandlers({
-	handleAuthSubmit: props => event => {
+	handleAuthSubmit: props => async event => {
 		event.preventDefault();
 		const values = {
 			email: event.target[0].value,
 			password: event.target[1].value
 		};
-		props.authAction(values);
+		await props.authAction(values);
+		props.history.push("/form");
 	}
 });

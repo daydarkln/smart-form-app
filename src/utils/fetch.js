@@ -49,7 +49,7 @@ export const authFetch = async (method, url, data) => {
 
 	const newAccessToken = async () => await refreshToken(refresh);
 
-	const access = isTokenValid
+	const access = !isTokenValid //todo
 		? appStorage.get("tokens/access")
 		: await newAccessToken();
 

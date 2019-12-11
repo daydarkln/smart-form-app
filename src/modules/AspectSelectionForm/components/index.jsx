@@ -1,18 +1,25 @@
 import React from 'react';
-import { Form, Select } from 'antd';
 
-const { Option } = Select;
+import ChannelSelection from './ChannelSelection';
+import CategorySelection from './CategorySelection';
+import AspectList from './AspectList';
 
 const AspectSelectionForm = props => (
-  <Form>
-    <Form.Item>
-      <Select onSelect={props.handleSelectChannel}>
-        {props.channelList.map(item => (
-          <Option value={item.id}>{item.name}</Option>
-        ))}
-      </Select>
-    </Form.Item>
-  </Form>
+  <>
+    <ChannelSelection
+      handleSelectChannel={props.handleSelectChannel}
+      channelList={props.channelList}
+    />
+    {props.isChannelSelected &&
+      <CategorySelection
+        handleSelectCategory={props.handleSelectCategory}
+        categoryList={props.categoryList}
+      />
+    }
+    {props.isCategorySelected && <AspectList />}
+
+  </>
+
 );
 
 export default AspectSelectionForm;

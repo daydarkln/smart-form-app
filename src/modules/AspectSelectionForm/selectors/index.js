@@ -1,4 +1,4 @@
-import { pathOr, assoc, filter, compose, find, propOr } from "ramda";
+import { pathOr, assoc, take, compose, find, propOr } from "ramda";
 
 export const getChannelList = state =>
 	pathOr([], ["aspectFormReducer", "channelListData", "results"], state);
@@ -16,34 +16,30 @@ export const getCategoryList = state => {
 	const formated = list.map(function formatItem(item) {
 		const initial = {
 			value: [item.category_id, item.level, item.id].join(","),
-			label: item.name
+			label: item.name,
+			isLeaf: item.is_leaf
 		};
 
-		debugger;
-
 		const getTrueLevel = child => {
-			const results = pathOr([], ["results"], child);
-			const parentId = pathOr(
-				"",
-				["parent_id"],
-				results.find(subitem => subitem.parent_id === item.category_id)
+			const childInstance = propOr([], "results")(child)[0];
+			return (
+				propOr(0, "level", childInstance) === propOr(0, "level", item) + 1 &&
+				propOr(0, "parent_id", childInstance) === propOr(0, "category_id", item)
 			);
-
-			return parentId === item.category_id;
 		};
 
 		const children = compose(
-			propOr([], "results"),
-			find(getTrueLevel),
+			find(child => getTrueLevel(child)),
 			pathOr([], ["aspectFormReducer", "categoryListData", "childrens"])
 		)(state);
+
+		const childrenList = propOr([], "results", children);
 
 		return item.is_leaf
 			? initial
 			: assoc(
 					"children",
-					children.map(subitem => {
-						debugger;
+					childrenList.map(subitem => {
 						return formatItem(subitem);
 					}),
 					initial

@@ -1,4 +1,5 @@
 import { withHandlers } from "recompose";
+import { takeLast } from "ramda";
 
 export default withHandlers({
 	handleSelectChannel: props => value => {
@@ -8,6 +9,7 @@ export default withHandlers({
 		props.selectParentAction(id, level);
 	},
 	handleSelectCategory: props => id => {
-		props.selectCategoryAction(id);
+		debugger;
+		props.selectCategoryAction(takeLast(1, id));
 	}
 });

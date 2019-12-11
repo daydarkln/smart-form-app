@@ -27,10 +27,36 @@ export const categorySelectionSuccess = value => ({
 	value
 });
 
+export const customCategorySelectionSuccess = value => ({
+	type: types.CUSTOM_CATEGORY_SUCCESS,
+	value
+});
+
 export const categorySelectionError = value => ({
 	type: types.CATEGORY_ERROR,
 	value
 });
+
+export const selectCategoryAction = value => async dispatch => {
+	const [id, level] = value[0].split(",");
+	dispatch(categorySelectionLoading(true));
+	try {
+		const res = await authFetch(
+			"get",
+			`v1/ebay/product/category/?level=${+level +
+				1}&domain_id=&parent_id=${id}&is_leaf=&category_id=&variations_supported=`
+		);
+
+		const data = res.data;
+
+		dispatch(customCategorySelectionSuccess(data));
+	} catch (e) {
+		message.error("Ошибка при получении списка категорий");
+		dispatch(categorySelectionError(e));
+	} finally {
+		dispatch(categorySelectionLoading(false));
+	}
+};
 
 export const channelSelectAction = value => async dispatch => {
 	dispatch(categorySelectionLoading(true));

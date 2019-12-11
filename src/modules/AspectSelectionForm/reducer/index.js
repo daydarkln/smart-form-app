@@ -1,4 +1,4 @@
-import { assoc, __, compose } from "ramda";
+import { assoc, __, compose, uniqBy, prop, pathOr } from "ramda";
 
 import types from "../types";
 
@@ -36,6 +36,15 @@ export default (state = initialState, action) => {
 
 		case types.CATEGORY_ERROR:
 			return assocState("categoryError");
+
+		case types.CUSTOM_CATEGORY_SUCCESS:
+			const childrens = pathOr([], ["categoryListData", "childrens"], state);
+			const result = compose(
+				assoc("childrens", uniqBy(prop("next"), [...childrens, action.value])),
+				pathOr({}, ["categoryListData"])
+			)(state);
+
+			return assoc("categoryListData", result, state);
 
 		default:
 			return state;

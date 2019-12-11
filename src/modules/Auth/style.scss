@@ -1,0 +1,22 @@
+.auth {
+	&__wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__form {
+		text-align: left;
+		padding: 0 40px 20px;
+		border-radius: 5px;
+		box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.13);
+	}
+
+	&__wrapper .ant-btn {
+		display: block;
+		margin-left: auto;
+		text-transform: uppercase;
+		padding-left: 0;
+		padding-right: 0;
+	}
+}

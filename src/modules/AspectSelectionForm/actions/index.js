@@ -37,8 +37,47 @@ export const categorySelectionError = value => ({
 	value
 });
 
-export const selectCategoryAction = value => async dispatch => {
-	const [id, level] = value[0].split(",");
+export const getAspectsSuccess = value => ({
+	type: types.GET_ASPECTS_SUCCESS,
+	value
+});
+
+export const getAspectsError = value => ({
+	type: types.GET_ASPECTS_ERROR,
+	value
+});
+
+export const setCategoryListVisible = value => ({
+	type: types.SET_CATEGORY_LIST_VISIBLE,
+	value
+});
+
+export const setAspectListVisible = value => ({
+	type: types.SET_ASPECT_LIST_VISIBLE,
+	value
+});
+
+export const getAspectsAction = id => async dispatch => {
+	const loading = message.loading("загрузка аспектов...");
+	try {
+		const res = await authFetch(
+			"get",
+			`v1/ebay/product/category/${id}/aspect/?limit=9999&aspectEnabledForVariations=&itemToAspectCardinality=&aspectRequired=`
+		);
+
+		const data = res.data;
+
+		dispatch(getAspectsSuccess(data));
+		dispatch(setAspectListVisible(true));
+	} catch (e) {
+		message.error("Ошибка при получении списка аспектов");
+		dispatch(getAspectsError(e));
+	} finally {
+		loading();
+	}
+};
+
+export const selectCategoryAction = (id, level) => async dispatch => {
 	dispatch(categorySelectionLoading(true));
 	try {
 		const res = await authFetch(
@@ -69,6 +108,7 @@ export const channelSelectAction = value => async dispatch => {
 		const data = res.data;
 
 		dispatch(categorySelectionSuccess(data));
+		dispatch(setCategoryListVisible(true));
 	} catch (e) {
 		message.error("Ошибка при получении списка категорий");
 		dispatch(categorySelectionError(e));

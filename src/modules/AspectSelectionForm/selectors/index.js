@@ -6,6 +6,9 @@ export const getChannelList = state =>
 export const getIsChannelSelected = state =>
 	pathOr(false, ["aspectFormReducer", "isChannelSelected"], state);
 
+export const getIsCategorySelected = state =>
+	pathOr(false, ["aspectFormReducer", "isCategorySelected"], state);
+
 export const getCategoryList = state => {
 	const list = pathOr(
 		[],
@@ -15,7 +18,7 @@ export const getCategoryList = state => {
 
 	const formated = list.map(function formatItem(item) {
 		const initial = {
-			value: [item.category_id, item.level, item.id].join(","),
+			value: [item.category_id, item.level, item.is_leaf, item.id].join(","),
 			label: item.name,
 			isLeaf: item.is_leaf
 		};

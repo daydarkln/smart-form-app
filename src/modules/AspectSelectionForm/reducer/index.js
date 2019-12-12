@@ -17,10 +17,7 @@ export default (state = initialState, action) => {
 			return assocState("isChannelListLoading");
 
 		case types.CHANNEL_SELECT_SUCCESS:
-			return compose(
-				assoc("channelListData", action.value),
-				assoc("isChannelSelected", true)
-			)(state);
+			return assoc("channelListData", action.value, state);
 
 		case types.CHANNEL_SELECT_ERROR:
 			return assocState("channelListError");
@@ -29,13 +26,22 @@ export default (state = initialState, action) => {
 			return assocState("isCategoryListLoading");
 
 		case types.CATEGORY_SUCCESS:
-			return compose(
-				assoc("categoryListData", action.value),
-				assoc("isChannelSelected", true)
-			)(state);
+			return assoc("categoryListData", action.value, state);
 
 		case types.CATEGORY_ERROR:
 			return assocState("categoryError");
+
+		case types.SET_CATEGORY_LIST_VISIBLE:
+			return assocState("isChannelSelected");
+
+		case types.SET_ASPECT_LIST_VISIBLE:
+			return assocState("isCategorySelected");
+
+		case types.GET_ASPECTS_SUCCESS:
+			return assocState("aspectList");
+
+		case types.GET_ASPECTS_ERROR:
+			return assocState("aspectError");
 
 		case types.CUSTOM_CATEGORY_SUCCESS:
 			const childrens = pathOr([], ["categoryListData", "childrens"], state);

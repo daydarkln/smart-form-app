@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Form, Input, Button, Spin } from 'antd';
 
 const Auth = props => (
-  <div className="auth__wrapper">
+  <div className="auth__wrapper fade-in">
     <Spin spinning={props.isAuthLoading}>
       <Card className="auth__form">
         <h2>Login</h2>

@@ -5,7 +5,7 @@ import CategorySelection from './CategorySelection';
 import AspectList from './AspectList';
 
 const AspectSelectionForm = props => (
-  <div className="aspect-selection__wrapper">
+  <div className="aspect-selection__wrapper fade-in">
     <ChannelSelection
       handleSelectChannel={props.handleSelectChannel}
       channelList={props.channelList}

@@ -1,24 +1,11 @@
 import types from "../types";
 import { authFetch } from "../../../utils/fetch";
 import { message } from "antd";
-
-export const channelSelectionLoading = value => ({
-	type: types.CHANNEL_SELECT_LOADING,
-	value
-});
-
-export const categorySelectionLoading = value => ({
-	type: types.CATEGORY_LOADING,
-	value
-});
+import appStorage from "../../../utils/storage";
+import { push } from "connected-react-router";
 
 export const channelSelectionSuccess = value => ({
 	type: types.CHANNEL_SELECT_SUCCESS,
-	value
-});
-
-export const channelSelectionError = value => ({
-	type: types.CHANNEL_SELECT_ERROR,
 	value
 });
 
@@ -32,18 +19,8 @@ export const customCategorySelectionSuccess = value => ({
 	value
 });
 
-export const categorySelectionError = value => ({
-	type: types.CATEGORY_ERROR,
-	value
-});
-
 export const getAspectsSuccess = value => ({
 	type: types.GET_ASPECTS_SUCCESS,
-	value
-});
-
-export const getAspectsError = value => ({
-	type: types.GET_ASPECTS_ERROR,
 	value
 });
 
@@ -69,16 +46,20 @@ export const getAspectsAction = id => async dispatch => {
 
 		dispatch(getAspectsSuccess(data));
 		dispatch(setAspectListVisible(true));
-	} catch (e) {
+	} catch ({ response }) {
+		if (response.status >= 400) {
+			appStorage.removeItem("tokens/refresh");
+			appStorage.removeItem("tokens/access");
+			window.location.pathname = "/auth";
+		}
 		message.error("Ошибка при получении списка аспектов");
-		dispatch(getAspectsError(e));
 	} finally {
 		loading();
 	}
 };
 
 export const selectCategoryAction = (id, level) => async dispatch => {
-	dispatch(categorySelectionLoading(true));
+	const loading = message.loading("загрузка подкатегорий...");
 	try {
 		const res = await authFetch(
 			"get",
@@ -89,16 +70,20 @@ export const selectCategoryAction = (id, level) => async dispatch => {
 		const data = res.data;
 
 		dispatch(customCategorySelectionSuccess(data));
-	} catch (e) {
+	} catch ({ response }) {
+		if (response.status >= 400) {
+			appStorage.removeItem("tokens/refresh");
+			appStorage.removeItem("tokens/access");
+			window.location.pathname = "/auth";
+		}
 		message.error("Ошибка при получении списка категорий");
-		dispatch(categorySelectionError(e));
 	} finally {
-		dispatch(categorySelectionLoading(false));
+		loading();
 	}
 };
 
 export const channelSelectAction = value => async dispatch => {
-	dispatch(categorySelectionLoading(true));
+	const loading = message.loading("загрузка категорий...");
 	try {
 		const res = await authFetch(
 			"get",
@@ -109,26 +94,34 @@ export const channelSelectAction = value => async dispatch => {
 
 		dispatch(categorySelectionSuccess(data));
 		dispatch(setCategoryListVisible(true));
-	} catch (e) {
+	} catch ({ response }) {
+		if (response.status >= 400) {
+			appStorage.removeItem("tokens/refresh");
+			appStorage.removeItem("tokens/access");
+			window.location.pathname = "/auth";
+		}
 		message.error("Ошибка при получении списка категорий");
-		dispatch(categorySelectionError(e));
 	} finally {
-		dispatch(categorySelectionLoading(false));
+		loading();
 	}
 };
 
 export const getChannelAction = () => async dispatch => {
-	dispatch(channelSelectionLoading(true));
+	const loading = message.loading("загрузка каналов...");
 	try {
 		const res = await authFetch("get", "v1/marketplace/channel/");
 
 		const data = res.data;
 
 		dispatch(channelSelectionSuccess(data));
-	} catch (e) {
+	} catch ({ response }) {
+		if (response.status >= 400) {
+			appStorage.removeItem("tokens/refresh");
+			appStorage.removeItem("tokens/access");
+			window.location.pathname = "/auth";
+		}
 		message.error("Ошибка при получении списка каналов");
-		dispatch(channelSelectionError(e));
 	} finally {
-		dispatch(channelSelectionLoading(false));
+		loading();
 	}
 };

@@ -1,8 +1,5 @@
 import types from "../types";
-import { authFetch } from "../../../utils/fetch";
-import { message } from "antd";
-import appStorage from "../../../utils/storage";
-import { push } from "connected-react-router";
+import { withTryCatch } from "../../../utils/helpers";
 
 export const channelSelectionSuccess = value => ({
 	type: types.CHANNEL_SELECT_SUCCESS,
@@ -35,93 +32,46 @@ export const setAspectListVisible = value => ({
 });
 
 export const getAspectsAction = id => async dispatch => {
-	const loading = message.loading("загрузка аспектов...");
-	try {
-		const res = await authFetch(
-			"get",
-			`v1/ebay/product/category/${id}/aspect/?limit=9999&aspectEnabledForVariations=&itemToAspectCardinality=&aspectRequired=`
-		);
-
-		const data = res.data;
-
-		dispatch(getAspectsSuccess(data));
-		dispatch(setAspectListVisible(true));
-	} catch ({ response }) {
-		if (response.status >= 400) {
-			appStorage.removeItem("tokens/refresh");
-			appStorage.removeItem("tokens/access");
-			window.location.pathname = "/auth";
-		}
-		message.error("Ошибка при получении списка аспектов");
-	} finally {
-		loading();
-	}
+	withTryCatch({
+		dispatch,
+		url: `v1/ebay/product/category/${id}/aspect/?limit=9999&aspectEnabledForVariations=&itemToAspectCardinality=&aspectRequired=`,
+		method: "get",
+		actionSuccess: getAspectsSuccess,
+		textLoading: "загрузка аспектов...",
+		textFailure: "Ошибка при получении списка аспектов"
+	});
 };
 
 export const selectCategoryAction = (id, level) => async dispatch => {
-	const loading = message.loading("загрузка подкатегорий...");
-	try {
-		const res = await authFetch(
-			"get",
-			`v1/ebay/product/category/?level=${+level +
-				1}&domain_id=&parent_id=${id}&is_leaf=&category_id=&variations_supported=`
-		);
-
-		const data = res.data;
-
-		dispatch(customCategorySelectionSuccess(data));
-	} catch ({ response }) {
-		if (response.status >= 400) {
-			appStorage.removeItem("tokens/refresh");
-			appStorage.removeItem("tokens/access");
-			window.location.pathname = "/auth";
-		}
-		message.error("Ошибка при получении списка категорий");
-	} finally {
-		loading();
-	}
+	withTryCatch({
+		dispatch,
+		url: `v1/ebay/product/category/?level=${+level +
+			1}&domain_id=&parent_id=${id}&is_leaf=&category_id=&variations_supported=`,
+		method: "get",
+		actionSuccess: customCategorySelectionSuccess,
+		textLoading: "загрузка подкатегорий...",
+		textFailure: "Ошибка при получении списка подкатегорий"
+	});
 };
 
 export const channelSelectAction = value => async dispatch => {
-	const loading = message.loading("загрузка категорий...");
-	try {
-		const res = await authFetch(
-			"get",
-			`v1/ebay/product/category/?level=1&domain_id=${value}&parent_id=&is_leaf=&category_id=&variations_supported=`
-		);
-
-		const data = res.data;
-
-		dispatch(categorySelectionSuccess(data));
-		dispatch(setCategoryListVisible(true));
-	} catch ({ response }) {
-		if (response.status >= 400) {
-			appStorage.removeItem("tokens/refresh");
-			appStorage.removeItem("tokens/access");
-			window.location.pathname = "/auth";
-		}
-		message.error("Ошибка при получении списка категорий");
-	} finally {
-		loading();
-	}
+	withTryCatch({
+		dispatch,
+		url: `v1/ebay/product/category/?level=1&domain_id=${value}&parent_id=&is_leaf=&category_id=&variations_supported=`,
+		method: "get",
+		actionSuccess: categorySelectionSuccess,
+		textLoading: "загрузка категорий...",
+		textFailure: "Ошибка при получении списка категорий"
+	});
 };
 
 export const getChannelAction = () => async dispatch => {
-	const loading = message.loading("загрузка каналов...");
-	try {
-		const res = await authFetch("get", "v1/marketplace/channel/");
-
-		const data = res.data;
-
-		dispatch(channelSelectionSuccess(data));
-	} catch ({ response }) {
-		if (response.status >= 400) {
-			appStorage.removeItem("tokens/refresh");
-			appStorage.removeItem("tokens/access");
-			window.location.pathname = "/auth";
-		}
-		message.error("Ошибка при получении списка каналов");
-	} finally {
-		loading();
-	}
+	withTryCatch({
+		dispatch,
+		url: "v1/marketplace/channel/",
+		method: "get",
+		actionSuccess: channelSelectionSuccess,
+		textLoading: "загрузка каналов...",
+		textFailure: "Ошибка при получении списка каналов"
+	});
 };

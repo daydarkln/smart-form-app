@@ -28,6 +28,26 @@
 	}
 }
 
-.aspect-list__form .ant-form-item label {
-	font-size: 13px;
+.aspect-list__form {
+	width: 100px;
+	min-height: 200px;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	.ant-form-item label {
+		font-size: 13px;
+	}
+}
+
+.aspect-list__wrapper {
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+
+	.ant-spin-nested-loading {
+		width: 100%;
+	}
 }

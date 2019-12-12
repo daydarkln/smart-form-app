@@ -4,6 +4,7 @@ import { takeLast } from "ramda";
 export default withHandlers({
 	handleSelectChannel: props => value => {
 		props.channelSelectAction(value);
+		props.setCategoryListVisible(true);
 	},
 	handleSelectParent: props => (id, level) => {
 		props.selectParentAction(id, level);
@@ -13,6 +14,7 @@ export default withHandlers({
 		const [category_id, level, isLeaf, id] = current.split(",");
 		if (isLeaf === "true") {
 			props.getAspectsAction(id);
+			props.setAspectListVisible(true);
 		} else {
 			props.selectCategoryAction(category_id, level);
 		}

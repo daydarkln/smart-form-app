@@ -3,6 +3,9 @@ import { pathOr, assoc, take, compose, find, propOr } from "ramda";
 export const getChannelList = state =>
 	pathOr([], ["aspectFormReducer", "channelListData", "results"], state);
 
+export const getAspectList = state =>
+	pathOr([], ["aspectFormReducer", "aspectList", "results"], state);
+
 export const getIsChannelSelected = state =>
 	pathOr(false, ["aspectFormReducer", "isChannelSelected"], state);
 

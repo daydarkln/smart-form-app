@@ -6,6 +6,7 @@ import * as actions from "../actions";
 const mapStateToProps = state => ({
 	channelList: selectors.getChannelList(state),
 	categoryList: selectors.getCategoryList(state),
+	aspectList: selectors.getAspectList(state),
 	isChannelSelected: selectors.getIsChannelSelected(state),
 	isCategorySelected: selectors.getIsCategorySelected(state)
 });

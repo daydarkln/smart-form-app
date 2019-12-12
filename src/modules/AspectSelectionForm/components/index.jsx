@@ -16,7 +16,7 @@ const AspectSelectionForm = props => (
         categoryList={props.categoryList}
       />
     }
-    {props.isCategorySelected && <AspectList />}
+    {props.isCategorySelected && <AspectList list={props.aspectList} />}
 
   </div>
 
